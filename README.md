@@ -21,7 +21,7 @@ vault secrets enable -path=hydra hydra
 First, we need to tell our plugin where its admin service is.
 
 ```
-$ vault write hydra/config/root admin_url=http://hydra.svc:4445 [public_url=https://hydra.localhost.svc] [client_id=xxxx] [client_secret=xxxx]
+$ vault write hydra/config/root admin_url=http://hydra.svc:4445 [skip_tls_verify=true/false] [public_url=https://hydra.localhost.svc] [client_id=xxxx] [client_secret=xxxx]
 ```
 
 Register a client config

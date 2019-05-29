@@ -15,6 +15,11 @@ func pathConfigRoot() *framework.Path {
 				Type:        framework.TypeString,
 				Description: "Address of Hydra Server Admin URL",
 			},
+			"skip_tls_verify": &framework.FieldSchema{
+				Type:        framework.TypeBool,
+				Default:     false,
+				Description: "Allow client to bypass TLS check",
+			},
 			"public_url": &framework.FieldSchema{
 				Type:        framework.TypeString,
 				Description: "Address of Hydra Server Public URL",
@@ -40,10 +45,11 @@ func pathConfigRoot() *framework.Path {
 
 func pathConfigRootWrite(ctx context.Context, req *logical.Request, data *framework.FieldData) (*logical.Response, error) {
 	entry, err := logical.StorageEntryJSON("config/root", rootConfig{
-		AdminURL:     data.Get("admin_url").(string),
-		PublicURL:    data.Get("public_url").(string),
-		ClientID:     data.Get("client_id").(string),
-		ClientSecret: data.Get("client_secret").(string),
+		AdminURL:      data.Get("admin_url").(string),
+		PublicURL:     data.Get("public_url").(string),
+		ClientID:      data.Get("client_id").(string),
+		ClientSecret:  data.Get("client_secret").(string),
+		SkipTLSVerify: data.Get("skip_tls_verify").(bool),
 	})
 	if err != nil {
 		return nil, err
@@ -57,10 +63,11 @@ func pathConfigRootWrite(ctx context.Context, req *logical.Request, data *framew
 }
 
 type rootConfig struct {
-	AdminURL     string `json:"admin_url"`
-	PublicURL    string `json:"public_url"`
-	ClientID     string `json:"client_id"`
-	ClientSecret string `json:"client_secret"`
+	AdminURL      string `json:"admin_url"`
+	PublicURL     string `json:"public_url"`
+	ClientID      string `json:"client_id"`
+	ClientSecret  string `json:"client_secret"`
+	SkipTLSVerify bool   `json:"skip_tls_verify"`
 }
 
 const pathConfigRootHelpSyn = `

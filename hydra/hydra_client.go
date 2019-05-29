@@ -44,6 +44,12 @@ func HydraClient(ctx context.Context, s logical.Storage) (*hydra.CodeGenSDK, err
 				sdk.AdminApi.Configuration.DefaultHeader["X-Forwarded-Proto"] = "https"
 			}
 		}
+		if config.SkipTLSVerify {
+			sdk.AdminApi.Configuration.Transport = &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
+			if sdk.PublicApi != nil {
+				sdk.PublicApi.Configuration.Transport = &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
+			}
+		}
 		return sdk, nil
 	}
 
